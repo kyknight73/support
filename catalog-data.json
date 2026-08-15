@@ -1248,16 +1248,7 @@
                     "summary": "EMP-1-1 - Interior Escutcheon",
                     "body": "Collaborations: EMP-1-1 requiere revisar el escudo interior, la batería y el montaje antes de reemplazar."
                   },
-                  "replacementGroups": [
-                    {
-                      "title": "FULL LOCK",
-                      "items": [
-                        { "name": "Gen 1 escutcheon", "value": "EMP-1-1-701" },
-                        { "name": "Alternate finish", "value": "EMP-1-1-0BP-701" },
-                        { "name": "Serial reference", "value": "EMP-1-1-021" }
-                      ]
-                    }
-                  ]
+                  "replacementGroups": []
                 },
                 {
                   "type": "variant",
@@ -1269,16 +1260,7 @@
                     "summary": "EMP-1-2 - Lock",
                     "body": "Collaborations: EMP-1-2 necesita revisar el módulo, el set de batería y la programación del acceso."
                   },
-                  "replacementGroups": [
-                    {
-                      "title": "FULL LOCK",
-                      "items": [
-                        { "name": "Gen 1 lock", "value": "EMP-1-2-702" },
-                        { "name": "Alternate finish", "value": "EMP-1-2-0BP-702" },
-                        { "name": "Serial reference", "value": "EMP-1-2-022" }
-                      ]
-                    }
-                  ]
+                  "replacementGroups": []
                 }
               ]
             },
@@ -1297,16 +1279,7 @@
                     "summary": "EMP-2-2 - F Key-Free",
                     "body": "Collaborations: EMP-2-2 valida programación, batería y panel si falla el acceso sin llave."
                   },
-                  "replacementGroups": [
-                    {
-                      "title": "FULL LOCK",
-                      "items": [
-                        { "name": "Gen 2 key-free", "value": "EMP-2-2-703" },
-                        { "name": "Alternate finish", "value": "EMP-2-2-0BP-703" },
-                        { "name": "Serial reference", "value": "EMP-2-2-023" }
-                      ]
-                    }
-                  ]
+                  "replacementGroups": []
                 },
                 {
                   "type": "variant",
@@ -1318,16 +1291,7 @@
                     "summary": "EMP-2-1 - F Keyed",
                     "body": "Collaborations: EMP-2-1 revisa el cilindro, la batería y la app si el acceso por llave falla."
                   },
-                  "replacementGroups": [
-                    {
-                      "title": "FULL LOCK",
-                      "items": [
-                        { "name": "Gen 2 keyed", "value": "EMP-2-1-704" },
-                        { "name": "Alternate finish", "value": "EMP-2-1-0BP-704" },
-                        { "name": "Serial reference", "value": "EMP-2-1-024" }
-                      ]
-                    }
-                  ]
+                  "replacementGroups": []
                 },
                 {
                   "type": "variant",
@@ -1339,16 +1303,7 @@
                     "summary": "EMP-2-3 - Interior Escutcheon",
                     "body": "Collaborations: EMP-2-3 verifica el escudo interior, la batería y el montaje antes de cambiar componentes."
                   },
-                  "replacementGroups": [
-                    {
-                      "title": "FULL LOCK",
-                      "items": [
-                        { "name": "Gen 2 escutcheon", "value": "EMP-2-3-705" },
-                        { "name": "Alternate finish", "value": "EMP-2-3-0BP-705" },
-                        { "name": "Serial reference", "value": "EMP-2-3-025" }
-                      ]
-                    }
-                  ]
+                  "replacementGroups": []
                 }
               ]
             }

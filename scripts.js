@@ -170,12 +170,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     const modelLabel = title || 'LOCK';
     const model = modelLabel.replace(/[^A-Z0-9]/g, '') || 'LOCK';
     const familyKey = family.includes('ASSURE') ? 'ASSURE' : family.includes('COLLAB') ? 'COLLABS' : family.includes('REAL') ? 'REAL LIVING' : family.includes('YALE') ? 'YALE CODE' : 'YALE';
+    const isAssure2 = family.includes('ASSURE 2');
+    const isYrdAssure1 = family.includes('ASSURE 1') && /^YRD/i.test(modelLabel);
+    const isAndersenVariant = /ANDERSEN/i.test(family) || /YRM2X7|YRM/i.test(modelLabel);
+    const isAllowedReplacementFamily = isAssure2 || isYrdAssure1 || isAndersenVariant;
 
     const supportSummary = item?.support?.summary || `${modelLabel} - Diagnóstico específico`;
     const supportBody = item?.support?.body || `${familyKey}: revisa el estado de la batería, el alcance Bluetooth y la app para ${modelLabel} antes de cambiar repuestos.`;
-    const replacementItems = Array.isArray(item?.replacementGroups) && item.replacementGroups.length
-      ? item.replacementGroups
-      : [{ title: 'FULL LOCK', items: [{ name: 'Standard finish', value: `${model}-BLE-600` }] }];
+    const placeholderReplacement = [{ title: 'Próximamente', items: [{ name: 'Próximamente', value: 'Próximamente' }] }];
+
+    const replacementItems = isAllowedReplacementFamily
+      ? (Array.isArray(item?.replacementGroups) && item.replacementGroups.length
+        ? item.replacementGroups
+        : placeholderReplacement)
+      : placeholderReplacement;
 
     const troubleshootingItems = [
       { summary: supportSummary, body: supportBody },
