@@ -295,14 +295,15 @@ h1 {
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.04);
   cursor: pointer;
-  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 
 .variant-copy-link:hover,
 .variant-copy-link:focus-visible {
   transform: translateY(-1px);
   border-color: rgba(255, 199, 76, 0.7);
-  background: rgba(255, 199, 76, 0.12);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.15), 0 8px 18px rgba(255, 255, 255, 0.12);
   outline: none;
 }
 
