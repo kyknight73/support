@@ -7,6 +7,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     .replace(/\"/g, '&quot;')
     .replace(/'/g, '&#39;');
 
+  const copyTextToClipboard = async (text) => {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return;
+    }
+
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.setAttribute('readonly', '');
+    textArea.style.position = 'fixed';
+    textArea.style.opacity = '0';
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+  };
+
   const renderVariant = (variant) => {
     const card = document.createElement('div');
     card.className = 'variant-card';
@@ -229,13 +246,53 @@ document.addEventListener('DOMContentLoaded', async () => {
           <div class="replacement-group">
             <h4>${escapeHtml(group.title)}</h4>
             ${group.items.map((entry) => `
-              <div class="replacement-item">
+              <button
+                type="button"
+                class="replacement-item copyable-replacement"
+                data-copy-value="${escapeHtml(entry.value || '')}"
+                aria-label="Copy replacement part number ${escapeHtml(entry.value || '')}"
+              >
                 <strong>${escapeHtml(entry.name)}</strong>
-                <span>${escapeHtml(entry.value)}</span>
-              </div>
+                <span class="replacement-value">${escapeHtml(entry.value)}</span>
+                <span class="copy-tooltip">Copy</span>
+              </button>
             `).join('')}
           </div>
         `).join('');
+
+        replacementGroup.querySelectorAll('.copyable-replacement').forEach((button) => {
+          const tooltip = button.querySelector('.copy-tooltip');
+          const value = button.dataset.copyValue || button.querySelector('.replacement-value')?.textContent?.trim() || '';
+
+          button.addEventListener('click', async () => {
+            if (!value) return;
+
+            try {
+              await copyTextToClipboard(value);
+              if (tooltip) {
+                tooltip.textContent = 'Copied!';
+              }
+              button.classList.add('copied');
+              window.clearTimeout(button._copyResetTimer);
+              button._copyResetTimer = window.setTimeout(() => {
+                if (tooltip) {
+                  tooltip.textContent = 'Copy';
+                }
+                button.classList.remove('copied');
+              }, 1200);
+            } catch (error) {
+              if (tooltip) {
+                tooltip.textContent = 'Failed';
+              }
+              window.clearTimeout(button._copyResetTimer);
+              button._copyResetTimer = window.setTimeout(() => {
+                if (tooltip) {
+                  tooltip.textContent = 'Copy';
+                }
+              }, 1200);
+            }
+          });
+        });
       }
     };
 
