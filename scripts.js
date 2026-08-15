@@ -177,13 +177,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     const supportSummary = item?.support?.summary || `${modelLabel} - Diagnóstico específico`;
     const supportBody = item?.support?.body || `${familyKey}: revisa el estado de la batería, el alcance Bluetooth y la app para ${modelLabel} antes de cambiar repuestos.`;
+    const emtekMessage = [{ title: 'NO REPLACEMENTS', items: [{ name: 'No reemplazamos partes', value: 'Nosotros no reemplazamos partes en este modelo' }] }];
     const placeholderReplacement = [{ title: 'Próximamente', items: [{ name: 'Próximamente', value: 'Próximamente' }] }];
 
-    const replacementItems = isAllowedReplacementFamily
-      ? (Array.isArray(item?.replacementGroups) && item.replacementGroups.length
-        ? item.replacementGroups
-        : placeholderReplacement)
-      : placeholderReplacement;
+    const replacementItems = isEmtekVariant
+      ? emtekMessage
+      : isAllowedReplacementFamily
+        ? (Array.isArray(item?.replacementGroups) && item.replacementGroups.length
+          ? item.replacementGroups
+          : placeholderReplacement)
+        : placeholderReplacement;
 
     const troubleshootingItems = [
       { summary: supportSummary, body: supportBody },
