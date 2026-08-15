@@ -264,6 +264,12 @@ h1 {
   color: #fff3bf;
 }
 
+.variant-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .variant-card .variant-link {
   display: inline-flex;
   align-items: center;
@@ -276,6 +282,41 @@ h1 {
   font-size: 0.85rem;
   font-weight: 700;
   white-space: nowrap;
+}
+
+.variant-copy-link {
+  width: 28px;
+  height: 28px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid rgba(255, 199, 76, 0.35);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.variant-copy-link:hover,
+.variant-copy-link:focus-visible {
+  transform: translateY(-1px);
+  border-color: rgba(255, 199, 76, 0.7);
+  background: rgba(255, 199, 76, 0.12);
+  outline: none;
+}
+
+.variant-copy-link img {
+  width: 14px;
+  height: 14px;
+  display: block;
+  object-fit: contain;
+  filter: drop-shadow(0 0 2px rgba(255, 226, 128, 0.7));
+}
+
+.variant-copy-link.copied {
+  border-color: rgba(46, 204, 113, 0.8);
+  background: rgba(46, 204, 113, 0.12);
 }
 
 .placeholder-image {

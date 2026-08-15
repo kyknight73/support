@@ -47,13 +47,51 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     if (variant.manual) {
+      const actions = document.createElement('div');
+      actions.className = 'variant-actions';
+
       const link = document.createElement('a');
       link.className = 'variant-link';
       link.href = variant.manual;
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
       link.textContent = 'Ver manual';
-      card.appendChild(link);
+
+      const copyButton = document.createElement('button');
+      copyButton.type = 'button';
+      copyButton.className = 'variant-copy-link';
+      copyButton.setAttribute('aria-label', `Copy manual link for ${variant.model || 'lock'}`);
+      copyButton.title = 'Copy manual link';
+
+      const copyIcon = document.createElement('img');
+      copyIcon.src = 'Images/copy.png';
+      copyIcon.alt = 'Copy manual link';
+      copyIcon.width = 14;
+      copyIcon.height = 14;
+      copyButton.appendChild(copyIcon);
+
+      copyButton.addEventListener('click', async () => {
+        try {
+          await copyTextToClipboard(link.href);
+          copyButton.classList.add('copied');
+          copyButton.title = 'Copied';
+          window.clearTimeout(copyButton._copyResetTimer);
+          copyButton._copyResetTimer = window.setTimeout(() => {
+            copyButton.classList.remove('copied');
+            copyButton.title = 'Copy manual link';
+          }, 1200);
+        } catch (error) {
+          copyButton.title = 'Copy failed';
+          window.clearTimeout(copyButton._copyResetTimer);
+          copyButton._copyResetTimer = window.setTimeout(() => {
+            copyButton.title = 'Copy manual link';
+          }, 1200);
+        }
+      });
+
+      actions.appendChild(link);
+      actions.appendChild(copyButton);
+      card.appendChild(actions);
     }
 
     return card;
