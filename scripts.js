@@ -170,6 +170,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const modelLabel = title || 'LOCK';
     const model = modelLabel.replace(/[^A-Z0-9]/g, '') || 'LOCK';
     const familyKey = family.includes('ASSURE') ? 'ASSURE' : family.includes('COLLAB') ? 'COLLABS' : family.includes('REAL') ? 'REAL LIVING' : family.includes('YALE') ? 'YALE CODE' : 'YALE';
+    const isEmtekVariant = /EMP-/i.test(modelLabel) || /EMTEK/i.test(family);
     const isAssure2 = family.includes('ASSURE 2');
     const isYrdAssure1 = family.includes('ASSURE 1') && /^YRD/i.test(modelLabel);
     const isAndersenVariant = /ANDERSEN/i.test(family) || /YRM2X7|YRM/i.test(modelLabel);
@@ -388,35 +389,55 @@ document.addEventListener('DOMContentLoaded', async () => {
       updateGalleryModal((currentGalleryIndex + direction + galleryItems.length) % galleryItems.length);
     };
 
-    galleryCards.forEach((thumb, index) => {
+    const bindGalleryThumb = (thumb, index) => {
       const img = thumb.querySelector('img');
       if (!img) return;
 
+      thumb.dataset.galleryIndex = String(index);
+      thumb.tabIndex = 0;
+
+      const showPreview = (event) => {
+        if (!preview || !previewImg) return;
+        previewImg.src = img.src;
+        previewImg.alt = img.alt;
+        preview.classList.add('show');
+        preview.setAttribute('aria-hidden', 'false');
+        if (event && typeof event.clientX === 'number' && typeof event.clientY === 'number') {
+          preview.style.left = `${Math.min(event.clientX + 18, window.innerWidth - 220)}px`;
+          preview.style.top = `${Math.min(event.clientY + 18, window.innerHeight - 120)}px`;
+        }
+      };
+
+      const hidePreview = () => {
+        if (!preview) return;
+        preview.classList.remove('show');
+        preview.setAttribute('aria-hidden', 'true');
+      };
+
       if (preview && previewImg) {
-        thumb.addEventListener('mouseenter', () => {
-          previewImg.src = img.src;
-          previewImg.alt = img.alt;
-          preview.classList.add('show');
-          preview.setAttribute('aria-hidden', 'false');
-        });
+        thumb.addEventListener('pointerenter', showPreview);
       }
 
-      thumb.addEventListener('mousemove', (event) => {
-        if (preview) {
-          preview.style.left = `${event.clientX}px`;
-          preview.style.top = `${event.clientY}px`;
+      thumb.addEventListener('pointermove', (event) => {
+        if (preview && preview.classList.contains('show')) {
+          preview.style.left = `${Math.min(event.clientX + 18, window.innerWidth - 220)}px`;
+          preview.style.top = `${Math.min(event.clientY + 18, window.innerHeight - 120)}px`;
         }
       });
 
-      thumb.addEventListener('mouseleave', () => {
-        if (preview) {
-          preview.classList.remove('show');
-          preview.setAttribute('aria-hidden', 'true');
+      thumb.addEventListener('pointerleave', hidePreview);
+      thumb.addEventListener('focus', showPreview);
+      thumb.addEventListener('blur', hidePreview);
+      thumb.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          openGallery(index);
         }
       });
-
       thumb.addEventListener('click', () => openGallery(index));
-    });
+    };
+
+    galleryCards.forEach(bindGalleryThumb);
 
     const closeGallery = () => {
       if (!galleryModal) return;
