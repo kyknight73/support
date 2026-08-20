@@ -278,6 +278,32 @@ h1 {
   white-space: nowrap;
 }
 
+.manual-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.copy-link-btn {
+  border: 1px solid rgba(255, 199, 76, 0.3);
+  border-radius: 8px;
+  padding: 7px 10px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff3bf;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.copy-link-btn:hover,
+.copy-link-btn:focus-visible {
+  background: rgba(255, 199, 76, 0.2);
+  outline: none;
+}
+
 .placeholder-image {
   width: 70px;
   height: 46px;
@@ -832,6 +858,14 @@ body.yale-page .family-card {
   border-radius: 20px;
   padding: 22px;
   box-shadow: 0 14px 30px rgba(0, 0, 0, 0.18);
+}
+
+body.yale-page {
+  background: linear-gradient(135deg, #5a4308, #9a7414 58%, #d5af3d);
+}
+
+body.august-page {
+  background: linear-gradient(135deg, #3d1116, #7f2830 58%, #b95046);
 }
 
 body.yale-page .family-card.real-living {

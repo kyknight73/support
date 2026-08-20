@@ -30,13 +30,26 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     if (variant.manual) {
+      const manualActions = document.createElement('div');
+      manualActions.className = 'manual-actions';
+
       const link = document.createElement('a');
       link.className = 'variant-link';
       link.href = variant.manual;
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
       link.textContent = 'Ver manual';
-      card.appendChild(link);
+      manualActions.appendChild(link);
+
+      const copyButton = document.createElement('button');
+      copyButton.className = 'copy-link-btn';
+      copyButton.type = 'button';
+      copyButton.dataset.copyLink = new URL(variant.manual, document.baseURI).href;
+      copyButton.textContent = 'Copiar enlace';
+      copyButton.setAttribute('aria-label', `Copiar enlace del manual ${variant.model}`);
+      manualActions.appendChild(copyButton);
+
+      card.appendChild(manualActions);
     }
 
     return card;
@@ -140,6 +153,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const bindInteractions = () => {
     const familyTriggers = document.querySelectorAll('.family-trigger');
     const submenuTriggers = document.querySelectorAll('.submenu-trigger');
+    const copyButtons = document.querySelectorAll('.copy-link-btn');
 
     familyTriggers.forEach((button) => {
       button.addEventListener('click', () => {
@@ -185,6 +199,40 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         submenu.classList.toggle('open', !isOpen);
         button.setAttribute('aria-expanded', String(!isOpen));
+      });
+    });
+
+    copyButtons.forEach((button) => {
+      button.addEventListener('click', async () => {
+        const link = button.dataset.copyLink;
+        if (!link) return;
+
+        try {
+          if (navigator.clipboard?.writeText) {
+            await navigator.clipboard.writeText(link);
+          } else {
+            const input = document.createElement('textarea');
+            input.value = link;
+            input.setAttribute('readonly', '');
+            input.style.position = 'fixed';
+            input.style.opacity = '0';
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand('copy');
+            input.remove();
+          }
+
+          const originalText = button.textContent;
+          button.textContent = 'Enlace copiado';
+          window.setTimeout(() => {
+            button.textContent = originalText;
+          }, 1800);
+        } catch {
+          button.textContent = 'No se pudo copiar';
+          window.setTimeout(() => {
+            button.textContent = 'Copiar enlace';
+          }, 1800);
+        }
       });
     });
 
@@ -465,8 +513,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
 
   try {
-    const response = await fetch('./catalog-data.json', { cache: 'no-store' });
-    if (!response.ok) throw new Error('No se pudo cargar el catálogo Yale.');
+    const catalogPath = document.body.dataset.catalog || 'catalog-data.json';
+    const response = await fetch(`./${catalogPath}`, { cache: 'no-store' });
+    if (!response.ok) throw new Error('No se pudo cargar el catálogo.');
     const catalogData = await response.json();
 
     renderCatalog(catalogData);

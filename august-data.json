@@ -1,0 +1,107 @@
+{
+  "families": [
+    {
+      "id": "august-models",
+      "title": "August",
+      "className": "august",
+      "description": "Modelos August disponibles para soporte técnico.",
+      "children": [
+        {
+          "type": "variant",
+          "model": "L1",
+          "description": "Modelo L1",
+          "image": "Images/Locks/August/L1.png",
+          "manual": "Manuales/August/L1.pdf",
+          "support": {
+            "summary": "L1 - Diagnóstico",
+            "body": "Revisa el estado de la batería, la conexión Bluetooth y la aplicación August antes de realizar un reset."
+          },
+          "replacementGroups": [
+            {
+              "title": "REPLACEMENT PART NUMBERS",
+              "items": [
+                { "name": "Información disponible", "value": "No hay información disponible para este modelo." }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "variant",
+          "model": "L2",
+          "description": "Modelo L2",
+          "image": "Images/Locks/August/L2.png",
+          "manual": "Manuales/August/L2.pdf",
+          "support": {
+            "summary": "L2 - Diagnóstico",
+            "body": "Revisa el estado de la batería, la conexión Bluetooth y la aplicación August antes de realizar un reset."
+          },
+          "replacementGroups": [
+            {
+              "title": "REPLACEMENT PART NUMBERS",
+              "items": [
+                { "name": "Información disponible", "value": "No hay información disponible para este modelo." }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "variant",
+          "model": "L3",
+          "description": "Modelo L3",
+          "image": "Images/Locks/August/L3.png",
+          "manual": "Manuales/August/L3.pdf",
+          "support": {
+            "summary": "L3 - Diagnóstico",
+            "body": "Revisa el estado de la batería, la conexión Bluetooth y la aplicación August antes de realizar un reset."
+          },
+          "replacementGroups": [
+            {
+              "title": "REPLACEMENT PART NUMBERS",
+              "items": [
+                { "name": "Información disponible", "value": "No hay información disponible para este modelo." }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "variant",
+          "model": "L4",
+          "description": "Modelo L4",
+          "image": "Images/Locks/August/L4.png",
+          "manual": "Manuales/August/L4.pdf",
+          "support": {
+            "summary": "L4 - Diagnóstico",
+            "body": "Revisa el estado de la batería, la conexión Bluetooth y la aplicación August antes de realizar un reset."
+          },
+          "replacementGroups": [
+            {
+              "title": "REPLACEMENT PART NUMBERS",
+              "items": [
+                { "name": "Información disponible", "value": "No hay información disponible para este modelo." }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "variant",
+          "model": "L5",
+          "description": "Modelo L5",
+          "image": "Images/Locks/August/L5.png",
+          "manual": "Manuales/August/L5.pdf",
+          "support": {
+            "summary": "L5 - Diagnóstico",
+            "body": "Revisa el estado de la batería, la conexión Bluetooth y la aplicación August antes de realizar un reset."
+          },
+          "replacementGroups": [
+            {
+              "title": "REPLACEMENT PART NUMBERS",
+              "items": [
+                { "name": "Información disponible", "value": "No hay información disponible para este modelo." }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,11 +1,59 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h2>Coming soon...</h2>
-</body>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Manuales August - Soporte Técnico</title>
+        <link rel="icon" href="Images/icon.png?v=2" type="image/png" sizes="32x32">
+        <link rel="shortcut icon" href="favicon.ico?v=2" type="image/x-icon">
+        <link rel="icon" href="favicon.ico?v=2" type="image/x-icon">
+        <link rel="stylesheet" href="./styles.css">
+    </head>
+    <body class="yale-page august-page" data-catalog="august-data.json">
+        <div class="page">
+            <header class="hero">
+                <a class="back-link" href="index.html">← Volver al inicio</a>
+                <span class="eyebrow">August / Soporte técnico</span>
+                <h1>Menú de manuales August</h1>
+                <p>
+                    Explora los manuales organizados por modelo de cerradura August.
+                    Cada sección incluye el manual oficial de instalación, configuración y mantenimiento.
+                </p>
+            </header>
+
+            <main class="menu-stack" id="catalogRoot"></main>
+
+            <p class="note">SI ENCUENTRAS ALGÚN PROBLEMA EN LA PÁGINA, FAVOR DE REPORTARLO CON ANDY GARCIA</p>
+        </div>
+
+        <div class="image-preview" id="imagePreview" aria-hidden="true">
+            <img id="imagePreviewImg" src="" alt="Vista previa ampliada">
+        </div>
+
+        <div class="gallery-modal" id="galleryModal" aria-hidden="true">
+            <div class="modal-content">
+                <button class="close-btn" id="closeGalleryBtn" type="button" aria-label="Cerrar galería">×</button>
+                <button class="nav-btn prev-btn" id="prevGalleryBtn" type="button" aria-label="Imagen anterior">←</button>
+                <div class="gallery-modal-grid">
+                    <aside class="gallery-panel troubleshooting-panel">
+                        <h3>Pasos de troubleshooting</h3>
+                        <p class="panel-description">Haz click en cada tarjeta para ver la acción.</p>
+                        <div class="troubleshooting-list" id="troubleshootingList"></div>
+                    </aside>
+                    <div class="carousel-inner">
+                        <img id="galleryModalImg" src="" alt="Imagen ampliada">
+                        <a class="carousel-caption" id="galleryModalTitle" href="#" aria-label="Ir al lock"></a>
+                    </div>
+                    <aside class="gallery-panel replacement-panel">
+                        <h3>Order part numbers / Serial</h3>
+                        <p class="panel-description">Lista de repuestos y números de serie para reemplazos.</p>
+                        <div class="replacement-scroll" id="replacementGroup"></div>
+                    </aside>
+                </div>
+                <button class="nav-btn next-btn" id="nextGalleryBtn" type="button" aria-label="Siguiente imagen">→</button>
+            </div>
+        </div>
+
+        <script src="./scripts.js"></script>
+    </body>
 </html>
