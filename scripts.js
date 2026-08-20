@@ -7,6 +7,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     .replace(/\"/g, '&quot;')
     .replace(/'/g, '&#39;');
 
+  const copyTextToClipboard = async (text) => {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return;
+    }
+
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.setAttribute('readonly', '');
+    textArea.style.position = 'fixed';
+    textArea.style.opacity = '0';
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+  };
+
   const renderVariant = (variant) => {
     const card = document.createElement('div');
     card.className = 'variant-card';
@@ -30,26 +47,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     if (variant.manual) {
-      const manualActions = document.createElement('div');
-      manualActions.className = 'manual-actions';
-
       const link = document.createElement('a');
       link.className = 'variant-link';
       link.href = variant.manual;
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
       link.textContent = 'Ver manual';
-      manualActions.appendChild(link);
-
-      const copyButton = document.createElement('button');
-      copyButton.className = 'copy-link-btn';
-      copyButton.type = 'button';
-      copyButton.dataset.copyLink = new URL(variant.manual, document.baseURI).href;
-      copyButton.textContent = 'Copiar enlace';
-      copyButton.setAttribute('aria-label', `Copiar enlace del manual ${variant.model}`);
-      manualActions.appendChild(copyButton);
-
-      card.appendChild(manualActions);
+      card.appendChild(link);
     }
 
     return card;
@@ -128,12 +132,24 @@ document.addEventListener('DOMContentLoaded', async () => {
     const modelLabel = title || 'LOCK';
     const model = modelLabel.replace(/[^A-Z0-9]/g, '') || 'LOCK';
     const familyKey = family.includes('ASSURE') ? 'ASSURE' : family.includes('COLLAB') ? 'COLLABS' : family.includes('REAL') ? 'REAL LIVING' : family.includes('YALE') ? 'YALE CODE' : 'YALE';
+    const isEmtekVariant = /EMP-/i.test(modelLabel) || /EMTEK/i.test(family);
+    const isAssure2 = family.includes('ASSURE 2');
+    const isYrdAssure1 = family.includes('ASSURE 1') && /^YRD/i.test(modelLabel);
+    const isAndersenVariant = /ANDERSEN/i.test(family) || /YRM2X7|YRM/i.test(modelLabel);
+    const isAllowedReplacementFamily = isAssure2 || isYrdAssure1 || isAndersenVariant;
 
     const supportSummary = item?.support?.summary || `${modelLabel} - Diagnóstico específico`;
     const supportBody = item?.support?.body || `${familyKey}: revisa el estado de la batería, el alcance Bluetooth y la app para ${modelLabel} antes de cambiar repuestos.`;
-    const replacementItems = Array.isArray(item?.replacementGroups) && item.replacementGroups.length
-      ? item.replacementGroups
-      : [{ title: 'FULL LOCK', items: [{ name: 'Standard finish', value: `${model}-BLE-600` }] }];
+    const emtekMessage = [{ title: 'NO REPLACEMENTS', items: [{ name: 'No reemplazamos partes', value: 'Nosotros no reemplazamos partes en este modelo' }] }];
+    const placeholderReplacement = [{ title: 'Próximamente', items: [{ name: 'Próximamente', value: 'Próximamente' }] }];
+
+    const replacementItems = isEmtekVariant
+      ? emtekMessage
+      : isAllowedReplacementFamily
+        ? (Array.isArray(item?.replacementGroups) && item.replacementGroups.length
+          ? item.replacementGroups
+          : placeholderReplacement)
+        : placeholderReplacement;
 
     const troubleshootingItems = [
       { summary: supportSummary, body: supportBody },
@@ -277,13 +293,53 @@ document.addEventListener('DOMContentLoaded', async () => {
           <div class="replacement-group">
             <h4>${escapeHtml(group.title)}</h4>
             ${group.items.map((entry) => `
-              <div class="replacement-item">
+              <button
+                type="button"
+                class="replacement-item copyable-replacement"
+                data-copy-value="${escapeHtml(entry.value || '')}"
+                aria-label="Copy replacement part number ${escapeHtml(entry.value || '')}"
+              >
                 <strong>${escapeHtml(entry.name)}</strong>
-                <span>${escapeHtml(entry.value)}</span>
-              </div>
+                <span class="replacement-value">${escapeHtml(entry.value)}</span>
+                <span class="copy-tooltip">Copy</span>
+              </button>
             `).join('')}
           </div>
         `).join('');
+
+        replacementGroup.querySelectorAll('.copyable-replacement').forEach((button) => {
+          const tooltip = button.querySelector('.copy-tooltip');
+          const value = button.dataset.copyValue || button.querySelector('.replacement-value')?.textContent?.trim() || '';
+
+          button.addEventListener('click', async () => {
+            if (!value) return;
+
+            try {
+              await copyTextToClipboard(value);
+              if (tooltip) {
+                tooltip.textContent = 'Copied!';
+              }
+              button.classList.add('copied');
+              window.clearTimeout(button._copyResetTimer);
+              button._copyResetTimer = window.setTimeout(() => {
+                if (tooltip) {
+                  tooltip.textContent = 'Copy';
+                }
+                button.classList.remove('copied');
+              }, 1200);
+            } catch (error) {
+              if (tooltip) {
+                tooltip.textContent = 'Failed';
+              }
+              window.clearTimeout(button._copyResetTimer);
+              button._copyResetTimer = window.setTimeout(() => {
+                if (tooltip) {
+                  tooltip.textContent = 'Copy';
+                }
+              }, 1200);
+            }
+          });
+        });
       }
     };
 
@@ -330,35 +386,55 @@ document.addEventListener('DOMContentLoaded', async () => {
       updateGalleryModal((currentGalleryIndex + direction + galleryItems.length) % galleryItems.length);
     };
 
-    galleryCards.forEach((thumb, index) => {
+    const bindGalleryThumb = (thumb, index) => {
       const img = thumb.querySelector('img');
       if (!img) return;
 
+      thumb.dataset.galleryIndex = String(index);
+      thumb.tabIndex = 0;
+
+      const showPreview = (event) => {
+        if (!preview || !previewImg) return;
+        previewImg.src = img.src;
+        previewImg.alt = img.alt;
+        preview.classList.add('show');
+        preview.setAttribute('aria-hidden', 'false');
+        if (event && typeof event.clientX === 'number' && typeof event.clientY === 'number') {
+          preview.style.left = `${Math.min(event.clientX + 18, window.innerWidth - 220)}px`;
+          preview.style.top = `${Math.min(event.clientY + 18, window.innerHeight - 120)}px`;
+        }
+      };
+
+      const hidePreview = () => {
+        if (!preview) return;
+        preview.classList.remove('show');
+        preview.setAttribute('aria-hidden', 'true');
+      };
+
       if (preview && previewImg) {
-        thumb.addEventListener('mouseenter', () => {
-          previewImg.src = img.src;
-          previewImg.alt = img.alt;
-          preview.classList.add('show');
-          preview.setAttribute('aria-hidden', 'false');
-        });
+        thumb.addEventListener('pointerenter', showPreview);
       }
 
-      thumb.addEventListener('mousemove', (event) => {
-        if (preview) {
-          preview.style.left = `${event.clientX}px`;
-          preview.style.top = `${event.clientY}px`;
+      thumb.addEventListener('pointermove', (event) => {
+        if (preview && preview.classList.contains('show')) {
+          preview.style.left = `${Math.min(event.clientX + 18, window.innerWidth - 220)}px`;
+          preview.style.top = `${Math.min(event.clientY + 18, window.innerHeight - 120)}px`;
         }
       });
 
-      thumb.addEventListener('mouseleave', () => {
-        if (preview) {
-          preview.classList.remove('show');
-          preview.setAttribute('aria-hidden', 'true');
+      thumb.addEventListener('pointerleave', hidePreview);
+      thumb.addEventListener('focus', showPreview);
+      thumb.addEventListener('blur', hidePreview);
+      thumb.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          openGallery(index);
         }
       });
-
       thumb.addEventListener('click', () => openGallery(index));
-    });
+    };
+
+    galleryCards.forEach(bindGalleryThumb);
 
     const closeGallery = () => {
       if (!galleryModal) return;

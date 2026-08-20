@@ -264,6 +264,12 @@ h1 {
   color: #fff3bf;
 }
 
+.variant-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .variant-card .variant-link {
   display: inline-flex;
   align-items: center;
@@ -276,32 +282,6 @@ h1 {
   font-size: 0.85rem;
   font-weight: 700;
   white-space: nowrap;
-}
-
-.manual-actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: 8px;
-}
-
-.copy-link-btn {
-  border: 1px solid rgba(255, 199, 76, 0.3);
-  border-radius: 8px;
-  padding: 7px 10px;
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff3bf;
-  font: inherit;
-  font-size: 0.85rem;
-  font-weight: 700;
-  white-space: nowrap;
-  cursor: pointer;
-}
-
-.copy-link-btn:hover,
-.copy-link-btn:focus-visible {
-  background: rgba(255, 199, 76, 0.2);
-  outline: none;
 }
 
 .placeholder-image {
@@ -619,12 +599,61 @@ h1 {
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: var(--text);
   line-height: 1.5;
+  text-align: left;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
-.replacement-item span {
+.replacement-item:hover,
+.replacement-item:focus-visible {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(248, 228, 126, 0.6);
+  box-shadow: 0 8px 18px rgba(7, 17, 31, 0.28);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.replacement-item strong {
+  text-align: left;
+}
+
+.replacement-value {
   color: var(--muted);
   font-size: 0.95rem;
   word-break: break-word;
+  text-align: left;
+}
+
+.copy-tooltip {
+  position: absolute;
+  top: -10px;
+  right: 12px;
+  transform: translateY(-100%);
+  padding: 5px 8px;
+  border-radius: 8px;
+  background: rgba(9, 16, 27, 0.95);
+  border: 1px solid rgba(248, 228, 126, 0.45);
+  color: #f8e71c;
+  font-size: 0.72rem;
+  line-height: 1;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.15s ease, visibility 0.15s ease, transform 0.15s ease;
+}
+
+.replacement-item:hover .copy-tooltip,
+.replacement-item:focus-visible .copy-tooltip,
+.replacement-item.copied .copy-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-100%);
+}
+
+.replacement-item.copied {
+  border-color: rgba(34, 197, 94, 0.7);
 }
 
 @media (max-width: 1100px) {
