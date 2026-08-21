@@ -47,13 +47,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     if (variant.manual) {
+      const actions = document.createElement('div');
+      actions.className = 'variant-actions';
+
       const link = document.createElement('a');
       link.className = 'variant-link';
       link.href = variant.manual;
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
       link.textContent = 'Ver manual';
-      card.appendChild(link);
+
+      const copyButton = document.createElement('button');
+      copyButton.className = 'copy-link-btn';
+      copyButton.type = 'button';
+      copyButton.dataset.copyLink = new URL(variant.manual, window.location.href).href;
+      copyButton.setAttribute('aria-label', `Copiar enlace del manual ${variant.model || ''}`.trim());
+      copyButton.innerHTML = '<img src="Images/copy.png" alt=""><span class="copy-link-label">Copiar enlace</span>';
+
+      actions.append(link, copyButton);
+      card.appendChild(actions);
     }
 
     return card;
@@ -238,15 +250,17 @@ document.addEventListener('DOMContentLoaded', async () => {
             input.remove();
           }
 
-          const originalText = button.textContent;
-          button.textContent = 'Enlace copiado';
+          const label = button.querySelector('.copy-link-label');
+          const originalText = label?.textContent || 'Copiar enlace';
+          if (label) label.textContent = 'Enlace copiado';
           window.setTimeout(() => {
-            button.textContent = originalText;
+            if (label) label.textContent = originalText;
           }, 1800);
         } catch {
-          button.textContent = 'No se pudo copiar';
+          const label = button.querySelector('.copy-link-label');
+          if (label) label.textContent = 'No se pudo copiar';
           window.setTimeout(() => {
-            button.textContent = 'Copiar enlace';
+            if (label) label.textContent = 'Copiar enlace';
           }, 1800);
         }
       });
@@ -485,7 +499,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   };
 
-  const buildCatalogIndex = (catalogData) => {
+  const buildCatalogIndex = (catalogData, brand, pageName) => {
     const catalog = [];
 
     const walk = (children, pathSegments) => {
@@ -496,8 +510,8 @@ document.addEventListener('DOMContentLoaded', async () => {
           catalog.push({
             model: child.model,
             description: child.description,
-            path: ['Yale', ...pathSegments, child.model].filter(Boolean).join('/'),
-            href: `YLManuals.html#lock-${encodeURIComponent(child.model)}`
+            path: [brand, ...pathSegments, child.model].filter(Boolean).join('/'),
+            href: `${pageName}#lock-${encodeURIComponent(child.model)}`
           });
         }
       });
@@ -510,13 +524,23 @@ document.addEventListener('DOMContentLoaded', async () => {
     return catalog;
   };
 
-  const setupSearch = (catalogData) => {
+  const setupSearch = async (catalogData) => {
     const lockSearch = document.getElementById('lockSearch');
     const searchResults = document.getElementById('searchResults');
 
     if (!lockSearch || !searchResults) return;
 
-    const catalog = buildCatalogIndex(catalogData);
+    const catalog = buildCatalogIndex(catalogData, 'Yale', 'YLManuals.html');
+
+    try {
+      const augustResponse = await fetch('./august-data.json', { cache: 'no-store' });
+      if (augustResponse.ok) {
+        const augustData = await augustResponse.json();
+        catalog.push(...buildCatalogIndex(augustData, 'August', 'ALManuals.html'));
+      }
+    } catch {
+      // Yale search remains available if the August catalog cannot be loaded.
+    }
     const renderSearchResults = () => {
       const query = lockSearch.value.trim().toLowerCase();
       searchResults.replaceChildren();

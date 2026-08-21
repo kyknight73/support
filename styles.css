@@ -284,6 +284,39 @@ h1 {
   white-space: nowrap;
 }
 
+.copy-link-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 6px 9px;
+  border: 1px solid rgba(255, 199, 76, 0.4);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.75);
+  color: inherit;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.copy-link-btn img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.copy-link-btn:hover,
+.copy-link-btn:focus-visible {
+  transform: translateY(-1px);
+  background: rgba(255, 199, 76, 0.2);
+  border-color: rgba(255, 199, 76, 0.8);
+  outline: none;
+}
+
 .placeholder-image {
   width: 70px;
   height: 46px;
@@ -937,5 +970,247 @@ body.yale-page .family-card p {
 
   body.index-page .brand-section {
     padding: 18px;
+  }
+}
+
+/* Brand themes for the manual catalogs */
+body.yale-page,
+body.august-page {
+  --page-ink: #241b08;
+  --page-muted: #6f5b2a;
+  --page-surface: rgba(255, 252, 239, 0.86);
+  --page-surface-strong: #fffdf5;
+  --page-line: rgba(91, 68, 15, 0.16);
+  --page-accent: #d49a00;
+  --page-accent-strong: #8e6500;
+  color: var(--page-ink);
+  font-family: "Avenir Next", "Trebuchet MS", sans-serif;
+  background: #f4c928;
+  position: relative;
+}
+
+body.yale-page::before,
+body.august-page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 8% 12%, rgba(255, 255, 255, 0.6), transparent 24%),
+    radial-gradient(circle at 92% 86%, rgba(255, 255, 255, 0.3), transparent 28%),
+    repeating-linear-gradient(115deg, rgba(255, 255, 255, 0.08) 0 2px, transparent 2px 18px);
+  opacity: 0.78;
+}
+
+body.yale-page .page,
+body.august-page .page {
+  position: relative;
+  z-index: 1;
+  padding-top: 44px;
+}
+
+body.yale-page .hero,
+body.august-page .hero {
+  background: var(--page-surface);
+  border: 1px solid var(--page-line);
+  border-radius: 28px;
+  padding: 34px 38px;
+  box-shadow: 0 22px 50px rgba(104, 70, 0, 0.2);
+  backdrop-filter: blur(16px);
+}
+
+body.yale-page .back-link,
+body.august-page .back-link {
+  color: var(--page-accent-strong);
+  font-weight: 800;
+}
+
+body.yale-page .back-link:hover,
+body.august-page .back-link:hover {
+  color: var(--page-ink);
+}
+
+body.yale-page .eyebrow,
+body.august-page .eyebrow {
+  background: var(--page-accent);
+  color: #fffdf5;
+  border-radius: 8px;
+  padding: 7px 11px;
+  box-shadow: 4px 4px 0 rgba(36, 27, 8, 0.12);
+}
+
+body.yale-page h1,
+body.august-page h1 {
+  color: var(--page-ink);
+  letter-spacing: -0.02em;
+}
+
+body.yale-page .hero p,
+body.august-page .hero p,
+body.yale-page .family-card p,
+body.august-page .family-card p,
+body.yale-page .note,
+body.august-page .note {
+  color: var(--page-muted);
+}
+
+body.yale-page .menu-stack,
+body.august-page .menu-stack {
+  gap: 18px;
+}
+
+body.yale-page .family-card,
+body.august-page .family-card {
+  background: var(--page-surface-strong);
+  border: 1px solid var(--page-line);
+  border-radius: 18px;
+  padding: 0;
+  box-shadow: 0 12px 28px rgba(104, 70, 0, 0.14);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+body.yale-page .family-card:hover,
+body.august-page .family-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 34px rgba(104, 70, 0, 0.2);
+}
+
+body.yale-page .family-trigger,
+body.august-page .family-trigger {
+  padding: 24px 26px;
+}
+
+body.yale-page .family-trigger:hover,
+body.august-page .family-trigger:hover {
+  background: rgba(255, 211, 58, 0.16);
+}
+
+body.yale-page .family-trigger .caret,
+body.august-page .family-trigger .caret {
+  background: var(--page-accent);
+  color: #fffdf5;
+}
+
+body.yale-page .family-panel,
+body.august-page .family-panel {
+  padding: 0 26px 26px;
+}
+
+body.yale-page .links a,
+body.yale-page .submenu-trigger,
+body.august-page .links a,
+body.august-page .submenu-trigger {
+  color: var(--page-ink);
+  background: #fffaf0;
+  border-color: var(--page-line);
+}
+
+body.yale-page .links a:hover,
+body.yale-page .submenu-trigger:hover,
+body.august-page .links a:hover,
+body.august-page .submenu-trigger:hover {
+  background: rgba(255, 211, 58, 0.22);
+  border-color: var(--page-accent);
+}
+
+body.yale-page .links a span:last-child,
+body.yale-page .submenu-trigger span:last-child,
+body.august-page .links a span:last-child,
+body.august-page .submenu-trigger span:last-child {
+  color: var(--page-accent-strong);
+}
+
+body.yale-page .variant-card,
+body.august-page .variant-card {
+  background: #fffdf7;
+  border: 1px solid var(--page-line);
+  border-left: 4px solid var(--page-accent);
+  color: var(--page-ink);
+}
+
+body.yale-page .variant-card .variant-info strong,
+body.august-page .variant-card .variant-info strong {
+  color: var(--page-ink);
+}
+
+body.yale-page .variant-card .variant-link,
+body.august-page .variant-card .variant-link {
+  background: var(--page-accent);
+  color: #fffdf5;
+}
+
+body.yale-page .placeholder-image,
+body.august-page .placeholder-image {
+  border-color: var(--page-line);
+  background: #f8e9aa;
+}
+
+body.yale-page .note,
+body.august-page .note {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+body.august-page {
+  --page-ink: #351014;
+  --page-muted: #75464b;
+  --page-surface: rgba(255, 246, 244, 0.88);
+  --page-surface-strong: #fffaf8;
+  --page-line: rgba(104, 22, 30, 0.17);
+  --page-accent: #b72b39;
+  --page-accent-strong: #861d29;
+  background: #d95a59;
+}
+
+body.august-page::before {
+  background:
+    radial-gradient(circle at 10% 8%, rgba(255, 255, 255, 0.58), transparent 25%),
+    radial-gradient(circle at 90% 88%, rgba(255, 210, 195, 0.42), transparent 30%),
+    repeating-linear-gradient(115deg, rgba(255, 255, 255, 0.08) 0 2px, transparent 2px 18px);
+}
+
+body.august-page .family-trigger:hover {
+  background: rgba(222, 75, 82, 0.12);
+}
+
+body.august-page .links a:hover,
+body.august-page .submenu-trigger:hover {
+  background: rgba(222, 75, 82, 0.14);
+}
+
+body.august-page .placeholder-image {
+  background: #f8d9d2;
+}
+
+body.august-page .copy-link-btn {
+  border-color: rgba(183, 43, 57, 0.3);
+}
+
+body.august-page .copy-link-btn:hover,
+body.august-page .copy-link-btn:focus-visible {
+  background: rgba(222, 75, 82, 0.14);
+  border-color: rgba(183, 43, 57, 0.7);
+}
+
+@media (max-width: 700px) {
+  body.yale-page .page,
+  body.august-page .page {
+    padding-top: 22px;
+  }
+
+  body.yale-page .hero,
+  body.august-page .hero {
+    padding: 24px 22px;
+  }
+
+  body.yale-page .family-trigger,
+  body.august-page .family-trigger {
+    padding: 20px;
+  }
+
+  body.yale-page .family-panel,
+  body.august-page .family-panel {
+    padding: 0 20px 20px;
   }
 }
